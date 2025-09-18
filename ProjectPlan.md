@@ -1,6 +1,5 @@
 # ProjectPlan.md
 
-## Title
 **Comparative Profiling and Integration of Anthropometric Data: Mendeley Body Measurements vs. NHANES 2021–2022**
 
 ## Contributors
@@ -72,3 +71,137 @@ Our goals are to (a) characterize similarities and differences in distributions 
 ## Methods & Workflow
 
 ### Directory Layout (proposed)
+
+
+### Tooling
+- **Python:** `requests`, `hashlib`, `pandas`, `pyreadstat` (XPT), `numpy`, `scipy`, `statsmodels`, `patsy`, `scikit-learn`  
+- **Survey design:** `statsmodels` survey API (primary) or `rpy2` → R `survey` (fallback) using `WTMEC2YR`, `SDMVSTRA`, `SDMVPSU`  
+- **Workflow:** **Snakemake** automating acquisition → parsing → integration → QC → analysis → visualization  
+- **Provenance:** Logged parameters, versions, file hashes; frozen environments (`requirements.txt`, optional `environment.yml`)  
+- **Reproducibility:** Single entry-point run (`snakemake -j 1`); outputs mirrored to **Box** as required; raw inputs retrieved programmatically
+
+### Data Acquisition & Integrity
+- Programmatically download **Mendeley CSV** and NHANES **`BMX_L.XPT` + `DEMO_L.XPT`**; persist **SHA-256** per raw file.  
+- Maintain a **download manifest** (URL, timestamp, expected/observed hash, file size, record counts).  
+- Sanity checks: **`SEQN`** uniqueness and joinability between BMX_L and DEMO_L.
+
+### Storage & Organization
+- **SQLite** for integrated analysis:  
+  - `participants` (DEMO_L subset): `SEQN`, `RIDAGEYR`, `RIAGENDR`, `RIDRETH3`, `WTMEC2YR`, `SDMVSTRA`, `SDMVPSU`  
+  - `measurements` (BMX_L subset): `SEQN`, `BMXBMI`, `BMXWT`, `BMXHT`, `BMXWAIST`  
+  - `mendeley_measures`: unified variables from Mendeley CSV (+ provenance columns)  
+  - `crosswalk`: variable mapping, units, transforms, and source provenance  
+- Enforce units (metric) and plausibility via constraints (e.g., adult `height_cm BETWEEN 120 AND 230`, configurable by age).
+
+### Extraction, Enrichment, Integration
+- Normalize units; compute **derived BMI** = `weight_kg / (height_m^2)` and store residual vs reported BMI.  
+- Create **age groups** (e.g., 18–29, 30–39, …) and harmonize **sex** (`F/M`).  
+- Implement the **variable crosswalk** and tag rows with `source`.  
+- Retain provenance columns (file name, acquisition date, hash).
+
+### Data Quality Assessment
+- **Missingness:** counts/proportions, visual summaries; MCAR/MAR plausibility notes.  
+- **Outliers:** physiologic bounds, robust Z (MAD), distribution-aware rules (e.g., implausible height/weight combos).  
+- **Internal consistency:** BMI recomputation residuals; rounding pattern checks; duplicates.  
+- **Cross-dataset comparability:** KS tests, QQ plots, and distance metrics (e.g., EMD) on key variables.  
+- **Documentation:** Auto-rendered **QC report** (HTML/MD) saved in `docs/`; include an **OpenRefine operation history (recipe)** for any manual cleaning steps.
+
+### Analysis & Modeling
+- **Descriptive (unweighted vs weighted):** means, medians, percentiles; hist/density/violin plots by source, sex, and age group.  
+- **Correlation structure:** Pearson/Spearman heatmaps; source-stratified comparisons.  
+- **Survey-weighted NHANES:** adult obesity prevalence (BMI ≥ 30), height/weight percentiles; standard errors using `SDMVSTRA`/`SDMVPSU`.  
+- **Predictive models:**  
+  - Regression: `BMI ~ age + sex + waist + height + interactions` (consider nonlinear terms/GAM).  
+  - Classification: Obesity (yes/no) with calibrated probabilities; **cross-dataset transfer** tests.  
+- **Model quality:** cross-validation, calibration, permutation importance (SHAP if time allows); fairness-aware reporting (descriptive, not prescriptive).
+
+### Visualization
+- Publication-quality plots (Matplotlib/Altair): distribution overlays, ridgelines/violins, correlation heatmaps, calibration curves.  
+- Export PNG/SVG and embed in the final README.
+
+## Timeline & Ownership (high-level)
+
+**Legend:** TG = Tongtong Gu, TL = Tanya Liu, both = joint
+
+### Phase 1 — Setup & Acquisition (Owner: TG; Support: TL)
+- Create GitHub repo, base structure, LICENSE, .gitignore.
+- Implement programmatic download + SHA-256 checks for:
+  - Mendeley CSV
+  - NHANES 2021–2022 **BMX_L.XPT** (anthropometry) and **DEMO_L.XPT** (demographics/survey design)
+
+---
+
+### Phase 2 — Harmonization & Storage (Owner: TG; Review: TL)
+- Build **variable crosswalk** (unified names/units), document conversions (cm/kg/kg·m⁻²).
+- Load to **SQLite**:
+  - `participants` (DEMO_L subset with `SEQN`, `RIDAGEYR`, `RIAGENDR`, `RIDRETH3`, `WTMEC2YR`, `SDMVSTRA`, `SDMVPSU`)
+  - `measurements` (BMX_L subset with `SEQN`, `BMXBMI`, `BMXWT`, `BMXHT`, `BMXWAIST`)
+  - `mendeley_measures` (unified variables + provenance)
+- Enforce adult filter (≥18y) and plausibility constraints.
+
+---
+
+### Phase 3 — Data Quality & Documentation (Owner: TL; Support: TG)
+- Profile missingness/outliers; recompute BMI and compare to reported values.
+- Flag duplicates/rounding patterns; generate **QC report**.
+- If manual edits applied, include **OpenRefine operation history (recipe)**.
+
+
+---
+
+### Phase 4 — Analysis & Modeling (Owner: TL; Support: TG)
+- Descriptive stats and visuals: NHANES (weighted) vs Mendeley (unweighted).
+- Correlation comparisons (by age/sex); KS/QQ/EMD on key measures.
+- Models:
+  - Regression: `BMI ~ age + sex + waist + height (+nonlinear terms as needed)`
+  - Classification: Obesity (BMI ≥ 30) with calibration
+  - **Cross-dataset transfer** (train on one, test on the other)
+
+---
+
+### Phase 5 — Workflow & Reproducibility (Owner: TG; Review: TL)
+- Orchestrate end-to-end with **Snakemake** (acquire→parse→integrate→QC→EDA→models→viz).
+- Freeze environment (`requirements.txt` / optional `environment.yml`), `pip freeze`.
+- Upload outputs to **Box**; document paths and run instructions.
+
+---
+
+### Phase 6 — Final Report & Release (Owner: both)
+- Write **README.md** (Summary, Data profile, Data quality, Findings, Reproducing, References).
+- Add contribution statement; clean repository; tag **final-project** release.
+
+## Requirement Coverage (summary)
+- **Data lifecycle** — both → README methods/diagram
+- **Ethical/legal/policy** — TL → README “Data profile” + citations/licenses + no re-ID statement
+- **Acquisition (≥2 datasets)** — TG → `scripts/acquire/` + checksums + manifest
+- **Storage & organization** — TG → SQLite schema/DDL + folder conventions
+- **Extraction & enrichment** — TG (TL review) → unit conversions; BMI derivation; age groups; sex harmonization
+- **Data integration** — TG → SEQN join; crosswalk; harmonized tables
+- **Data quality** — TL → `scripts/quality/`; QC report; OpenRefine operation history
+- **Data cleaning** — TL → cleaning scripts/notes; OpenRefine recipe archived
+- **Workflow & provenance** — TG → Snakemake; logs; environment freeze
+- **Reproducibility & transparency** — both → README “Reproducing”; Box link; run-all instructions
+- **Metadata & documentation** — TL (TG review) → data dictionary/codebook; schema diagram; references
+
+
+## Constraints
+- **Coverage mismatch:** NHANES BMX does not include chest circumference; chest analyses are single-source (Mendeley) only and labeled as such.
+- **Demographics in Mendeley:** If age/sex are absent or incomplete, cross-dataset comparisons will be limited to height/weight/BMI/waist and stratified only where data permit.
+- **Survey design complexity:** We will use 2-year examination weights (`WTMEC2YR`) with `SDMVSTRA`/`SDMVPSU`. Variance estimation beyond linearization or multi-cycle combining is out of scope if time is limited.
+- **Population scope:** Primary analyses focus on adults (≥18y); pediatric BMI percentiles are out of scope unless time permits.
+- **Licensing & redistribution:** Raw data are retrieved programmatically and kept out of Git; only derived outputs and metadata are shared with proper citations.
+- **Timeline risk:** If time is tight, we prioritize: acquisition → harmonization → QC → descriptive comparisons → minimal models → documentation.
+
+
+## Gaps & Open Questions
+- Confirm Mendeley demographics availability; constrain cross-dataset comparisons if absent.  
+- Decide on race/ethnicity stratifications given Mendeley limitations.  
+- Scope SHAP/fairness diagnostics based on time budget.  
+- Optional: extend to NHANES 2023–2024 (BMX_M) and document weight-combination strategy.
+
+
+## References 
+- Kiru, M. (2021). *Body Measurements Datasets*. Mendeley Data. DOI: 10.17632/bjv6c9pmp4.1  
+- CDC/NCHS. *NHANES 2021–2022 Anthropometry (BMX_L) and Demographics (DEMO_L) Documentation and Data Files*.  
+
+---
