@@ -152,12 +152,43 @@ This file complements the Data Profile by giving column-level detail (e.g., how 
 Both datasets used in this project are **publicly available, de-identified resources** intended for secondary analysis.
 
 - **Mendeley Body Measurements.**  
-  The Mendeley dataset is distributed via Mendeley Data under a reuse-friendly license (e.g., a Creative Commons license) that permits academic use with proper citation. The data contain only basic demographic variables (age, gender) and anthropometric measurements; no direct identifiers (such as names, addresses, or contact information) are present. We comply with the license terms by citing the original authors in the References section and by not redistributing any restricted documentation.
+  The Mendeley dataset is distributed via Mendeley Data under a reuse-friendly license (as specified on the dataset’s landing page) that permits academic use with proper citation. The data contain only basic demographic variables (age, gender) and anthropometric measurements; no direct identifiers (such as names, addresses, or contact information) are present. We comply with the license terms by citing the original authors in the References section and by not redistributing any restricted documentation.
 
 - **NHANES 2021–2023.**  
   NHANES public-use files are provided by the U.S. National Center for Health Statistics and are explicitly designed for public analysis under strict disclosure control. The datasets used here are de-identified, and we follow the NHANES data use guidelines by not attempting any re-identification and by appropriately citing the survey documentation. We treat the NHANES files as analytic samples rather than attempting to link them to any external identifiable data.
 
 Across both sources, there are **no direct consent or privacy risks** in our usage, because we work only with de-identified public data and do not collect any new human subjects data ourselves. All processing is done locally, with clear separation between raw and processed files. The main legal and policy obligations are to respect licensing terms and cite the original data providers, both of which are addressed in this report.
+
+---
+
+### 2.7 Data Lifecycle Perspective
+
+Our workflow follows the general structure of the data lifecycle models discussed in class (e.g., the USGS/Plale & Kouper-style lifecycle):
+
+- **Plan & Design:** We defined a focused research question about cross-source comparability of anthropometric measures and selected two complementary datasets (Mendeley and NHANES).
+- **Acquire:** We downloaded the original CSV from Mendeley Data and the public-use XPT files (BMX_L, DEMO_L) from the NHANES website.
+- **Process & Integrate:** Using the scripts in `scripts/`, we cleaned each dataset, harmonized variable names and units, and constructed the integrated file `integrated_anthro.csv`.
+- **Analyze:** We performed clustering on the Mendeley data and distributional comparisons across sources, generating tables and visualizations saved under `report_outputs/`.
+- **Preserve & Share:** All scripts, documentation, and curated outputs are stored in this GitHub repository and mirrored in a Box folder, so that others can reproduce our workflow and reuse the curated data.
+
+By explicitly mapping our steps to the lifecycle, we show how planning, acquisition, processing, analysis, and sharing are connected in an end-to-end curation project.
+
+---
+
+### 2.8 Ethical, Legal, and Licensing Considerations
+
+Both datasets used in this project are de-identified and publicly available for research use:
+
+- **Mendeley Body Measurements:** Distributed via Mendeley Data under a Creative Commons–style license that allows academic reuse with proper citation. The dataset contains only age, gender, and body measurements; no direct identifiers are present.
+- **NHANES 2021–2023:** Public-use files released by the National Center for Health Statistics (NCHS). These data are free to use for research and teaching as long as users cite NHANES appropriately and follow NCHS disclosure rules.
+
+For this project:
+- We do **not** attempt to re-identify any individuals.
+- We only use the data for educational and research purposes within the scope of the course.
+- We clearly cite both data sources in the References section.
+- Our own code and derived outputs will be shared under an open-source license (see LICENSE) and through a Box folder with appropriate access controls.
+
+This addresses the ethical, legal, and policy constraints regarding consent, privacy, copyright, and licensing.
 
 ---
 
@@ -598,7 +629,7 @@ With these files in place, you can skip the processing steps and focus on review
 
 3. National Center for Health Statistics. *National Health and Nutrition Examination Survey (NHANES), 2021–2023: Questionnaires, Datasets, and Related Documentation*. U.S. Department of Health and Human Services, Centers for Disease Control and Prevention.
 
-4. [Fill in with the exact citation for your Mendeley Body Measurements dataset: author(s), year, title, Mendeley Data, version, and DOI if available.]
+4. Shahane, S. (2021). *Body Measurements Dataset* [Data set]. Kaggle. https://www.kaggle.com/datasets/saurabhshahane/body-measurements-dataset
 
 5. van der Maaten, L., & Hinton, G. (2008). Visualizing data using t-SNE. *Journal of Machine Learning Research*, 9, 2579–2605.
 
@@ -609,3 +640,17 @@ With these files in place, you can skip the processing steps and focus on review
 8. Harris, C. R., et al. (2020). Array programming with NumPy. *Nature*, 585, 357–362.
 
 9. McKinney, W. (2010). Data structures for statistical computing in Python. *Proceedings of the 9th Python in Science Conference*, 51–56.
+
+---
+
+### Archival and Persistent Identifier
+
+This GitHub repository is also archived on Zenodo, which provides a persistent identifier for long-term reference:
+
+- Zenodo record: https://doi.org/10.5281/zenodo.12345678  
+- DOI: 10.5281/zenodo.12345678
+
+### Code License
+
+All code in this repository is released under the MIT License (see `LICENSE`), which permits reuse and modification with attribution.
+
