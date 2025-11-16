@@ -122,8 +122,7 @@ Column names in both cleaned datasets are standardized to exactly these spelling
 To support reproducibility and traceability, we adopt the following directory structure:
 
 ```text
-data/
-               # original CSV and XPT files (never modified) & cleaned and harmonized datasets 
+data/           # original CSV and XPT files (never modified) & cleaned and harmonized datasets 
 scripts/        # all Python scripts used in the workflow
 report_outputs/
   figs/         # generated figures (plots, visualizations)
