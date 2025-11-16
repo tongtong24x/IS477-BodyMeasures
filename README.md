@@ -116,7 +116,7 @@ Column names in both cleaned datasets are standardized to exactly these spelling
 
 ---
 
-````markdown
+
 ### 2.4 Storage and Organization
 
 To support reproducibility and traceability, we adopt the following directory structure:
@@ -133,7 +133,7 @@ report_outputs/
 
 Raw files (`BodyMeasurements_original.csv`, `BMX_L.xpt`, `DEMO_L.xpt`) are preserved in `data/raw/` and are never edited manually. All cleaning, transformation, and integration steps are performed by scripts in `scripts/`, and their outputs are written to `data/processed/` or `report_outputs/`. This separation between raw and processed data makes it easy to track provenance and rerun the workflow from scratch.
 
-````
+
 
 ---
 
