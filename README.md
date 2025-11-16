@@ -600,25 +600,6 @@ Using `run_all.py` ensures that intermediate files are regenerated from scratch 
 
 ---
 
-### 6.5 Using Precomputed Outputs from Box (If Applicable)
-
-To simplify grading and reuse, we also provide a Box folder containing precomputed processed data and outputs (figures and tables).
-
-* **Box folder:** `[INSERT BOX LINK HERE]`
-
-To use the Box archive:
-
-1. Download the archive from the Box link.
-2. Extract the contents into the project directory, preserving the folder structure so that:
-
-   * `data/processed/` contains the cleaned and integrated CSV files.
-   * `report_outputs/figs/` contains all generated plots.
-   * `report_outputs/tables/` contains the summary tables and clustering outputs.
-
-With these files in place, you can skip the processing steps and focus on reviewing the code, report, and results.
-
----
-
 ## 7. References
 
 1. National Center for Health Statistics. *NHANES August 2021–August 2023: Body Measures (BMX_L) Data Documentation, Codebook, and Frequencies*. U.S. Department of Health and Human Services, Centers for Disease Control and Prevention.
