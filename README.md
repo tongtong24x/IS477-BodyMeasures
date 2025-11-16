@@ -1,4 +1,4 @@
-# Title: Comparative Analysis of Anthropometric Measurements Across Mendeley and NHANES (2021–2023)
+# Comparative Analysis of Anthropometric Measurements Across Mendeley and NHANES (2021–2023)
 
 ## Contributors
 - Tongtong Gu (Lead: Data Engineering & Integration)
