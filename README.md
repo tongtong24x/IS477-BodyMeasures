@@ -123,8 +123,7 @@ To support reproducibility and traceability, we adopt the following directory st
 
 ```text
 data/
-  raw/          # original CSV and XPT files (never modified)
-  processed/    # cleaned and harmonized datasets
+               # original CSV and XPT files (never modified) & cleaned and harmonized datasets 
 scripts/        # all Python scripts used in the workflow
 report_outputs/
   figs/         # generated figures (plots, visualizations)
