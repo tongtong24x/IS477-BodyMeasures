@@ -608,7 +608,7 @@ Using `run_all.py` ensures that intermediate files are regenerated from scratch 
 
 3. National Center for Health Statistics. *National Health and Nutrition Examination Survey (NHANES), 2021–2023: Questionnaires, Datasets, and Related Documentation*. U.S. Department of Health and Human Services, Centers for Disease Control and Prevention.
 
-4. Shahane, S. (2021). *Body Measurements Dataset* [Data set]. Kaggle. https://www.kaggle.com/datasets/saurabhshahane/body-measurements-dataset
+4. Shahane, S. (2021). *Body Measurements Dataset*. Kaggle. https://www.kaggle.com/datasets/saurabhshahane/body-measurements-dataset
 
 5. van der Maaten, L., & Hinton, G. (2008). Visualizing data using t-SNE. *Journal of Machine Learning Research*, 9, 2579–2605.
 
