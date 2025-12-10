@@ -157,6 +157,8 @@ Both datasets used in this project are **publicly available, de-identified resou
 
 Across both sources, there are **no direct consent or privacy risks** in our usage, because we work only with de-identified public data and do not collect any new human subjects data ourselves. All processing is done locally, with clear separation between raw and processed files. The main legal and policy obligations are to respect licensing terms and cite the original data providers, both of which are addressed in this report.
 
+Our own code and derived outputs are shared under an open-source license (see LICENSE) and through a Box folder with appropriate access controls.
+
 ---
 
 ### 2.7 Data Lifecycle Perspective
@@ -170,23 +172,6 @@ Our workflow follows the general structure of the data lifecycle models discusse
 - **Preserve & Share:** All scripts, documentation, and curated outputs are stored in this GitHub repository and mirrored in a Box folder, so that others can reproduce our workflow and reuse the curated data.
 
 By explicitly mapping our steps to the lifecycle, we show how planning, acquisition, processing, analysis, and sharing are connected in an end-to-end curation project.
-
----
-
-### 2.8 Ethical, Legal, and Licensing Considerations
-
-Both datasets used in this project are de-identified and publicly available for research use:
-
-- **Mendeley Body Measurements:** Distributed via Mendeley Data under a Creative Commons–style license that allows academic reuse with proper citation. The dataset contains only age, gender, and body measurements; no direct identifiers are present.
-- **NHANES 2021–2023:** Public-use files released by the National Center for Health Statistics (NCHS). These data are free to use for research and teaching as long as users cite NHANES appropriately and follow NCHS disclosure rules.
-
-For this project:
-- We do **not** attempt to re-identify any individuals.
-- We only use the data for educational and research purposes within the scope of the course.
-- We clearly cite both data sources in the References section.
-- Our own code and derived outputs will be shared under an open-source license (see LICENSE) and through a Box folder with appropriate access controls.
-
-This addresses the ethical, legal, and policy constraints regarding consent, privacy, copyright, and licensing.
 
 ---
 
@@ -421,7 +406,7 @@ Finally, there are opportunities to further enhance the project’s documentatio
   The existing `data_dictionary.md` could be extended with references to external codebooks, explicit unit definitions, and links to official NHANES documentation. A machine-readable metadata file (e.g., JSON-LD following Schema.org or DataCite) could also be added.
 
 - **Archival publication.**  
-  The repository, along with generated outputs, could be deposited in an archival repository (e.g., Zenodo or Figshare), which would mint a DOI. This would satisfy the course’s emphasis on persistent identifiers and make the curated workflow citable.
+  The repository, along with generated outputs, could be deposited in an archival repository, which would mint a DOI. This would satisfy the course’s emphasis on persistent identifiers and make the curated workflow citable.
 
 - **Guides for reuse.**  
   A short “How to reuse this project” section or notebook could be added, showing how others might plug in their own anthropometric dataset and rerun the integration and quality checks.
@@ -445,8 +430,8 @@ This section describes how to reproduce the full workflow of the project, from o
 Clone the repository:
 
 ```bash
-git clone <REPO_URL>
-cd <REPO_FOLDER_NAME>
+git clone https://github.com/tongtong24x/IS477-BodyMeasures.git
+cd IS477-BodyMeasures
 ````
 
 Create and activate a virtual environment (optional, but recommended):
@@ -600,6 +585,23 @@ Using `run_all.py` ensures that intermediate files are regenerated from scratch 
 
 ---
 
+### 6.5 Using precomputed outputs from Box
+
+For convenience, all processed datasets and output tables/figures are also archived in a Box folder:
+
+Box folder:https://uofi.box.com/s/8pukjxj0mcl4wv95r2ellxo6xqadh39d
+
+To use these precomputed outputs:
+
+1. Download the archive from the Box link.
+2. Extract it into the project root so that the following folders exist:
+   - `data/processed/`
+   - `report_outputs/figs/`
+   - `report_outputs/tables/`
+3. You can then skip the cleaning/integration steps and directly inspect the results.
+
+---
+
 ## 7. References
 
 1. National Center for Health Statistics. *NHANES August 2021–August 2023: Body Measures (BMX_L) Data Documentation, Codebook, and Frequencies*. U.S. Department of Health and Human Services, Centers for Disease Control and Prevention.
@@ -621,13 +623,6 @@ Using `run_all.py` ensures that intermediate files are regenerated from scratch 
 9. McKinney, W. (2010). Data structures for statistical computing in Python. *Proceedings of the 9th Python in Science Conference*, 51–56.
 
 ---
-
-### Archival and Persistent Identifier
-
-This GitHub repository is also archived on Zenodo, which provides a persistent identifier for long-term reference:
-
-- Zenodo record: https://doi.org/10.5281/zenodo.12345678  
-- DOI: 10.5281/zenodo.12345678
 
 ### Code License
 
